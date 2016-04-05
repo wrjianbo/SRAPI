@@ -60,6 +60,7 @@ public class YesOrNoCommand {
 //        }
 //        Toast.makeText(context,"please start to talk",Toast.LENGTH_SHORT).show();
         recognizer.startListening(intent);
+
     }
     public int returnI(){
         return targetI+1;
