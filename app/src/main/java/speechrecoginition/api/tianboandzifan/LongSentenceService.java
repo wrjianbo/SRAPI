@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class LongSentenceService extends Service {
     private Handler handler=null;
     private Runnable runnable=null;
-    int i = 0;
+    int i,minTime = 0;
     SpeechRecognizer recognizer=null;
     Intent intent1=null;
     String str = "";
@@ -27,6 +27,7 @@ public class LongSentenceService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
+
         throw new UnsupportedOperationException("Not yet implemented");
     }
     @Override
@@ -35,7 +36,7 @@ public class LongSentenceService extends Service {
         //init timer
         handler = new Handler();
         runnable = new Runnable1();
-        init();
+
         super.onCreate();
     }
     private void init(){
@@ -64,7 +65,7 @@ public class LongSentenceService extends Service {
 
         @Override
         public void run() {
-            if(i<30) {
+            if(i<minTime) {
                 i++;
                 Log.v("myService", "" + i);
                 handler.postDelayed(this, 1000);
@@ -73,7 +74,7 @@ public class LongSentenceService extends Service {
                 handler.removeCallbacks(runnable);
                 Log.v("myService", "cancel");
                 recognizer.stopListening();
-
+                //send broadcast
             }
         }
     }
@@ -81,14 +82,16 @@ public class LongSentenceService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //init i and str
+        //init i ,str
         i=0;
         str="";
+        minTime=intent.getIntExtra("minTime",30);
+        Log.v("onBind", "" + minTime);
+        this.init();
         //start listening user
         recognizer.startListening(intent1);
         //start timer
         handler.postDelayed(runnable, 1000);
-
         return super.onStartCommand(intent, flags, startId);
 
     }
@@ -149,8 +152,8 @@ public class LongSentenceService extends Service {
                     s = "SERVER ERROR";
                     break;
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-//                    s = "SPEECH TIMEOUT";
-                    if(i<30) {
+                    s = "";
+                    if(i<minTime) {
                         //restart if timeout
                         Log.v("SPEECH TIMEOUT", "restart listening");
                         recognizer.destroy();
@@ -159,8 +162,8 @@ public class LongSentenceService extends Service {
                     }
                     break;
             }
-
-            Toast.makeText(LongSentenceService.this,s,Toast.LENGTH_SHORT).show();
+            if(!s.equals(""))
+                Toast.makeText(LongSentenceService.this,s,Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -168,7 +171,7 @@ public class LongSentenceService extends Service {
             ArrayList<String> recognizer_result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             str = str + recognizer_result.get(0).trim() + " ";
             Log.v("myService", str);
-            if(i<30) {
+            if(i<minTime) {
                 //restart listening
                 recognizer.startListening(intent1);
                 Log.v("onResults", "restart listening");

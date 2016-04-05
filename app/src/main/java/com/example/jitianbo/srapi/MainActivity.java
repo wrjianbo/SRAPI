@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tv,tv2=null;
     APIClass api=null;
     Button lsBtn = null;
+
     private ImageView imageView=null;
     private AnimationDrawable animationDrawable=null;
     @Override
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pressToTalkBtn.setOnLongClickListener(this);
         lsBtn=(Button)findViewById(R.id.lsBtn);
         lsBtn.setOnClickListener(this);
+
         //invoke API
         api=new APIClass(this,tv2,animationDrawable,imageView);
 

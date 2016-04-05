@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import speechrecoginition.api.tianboandzifan.LongSentenceService;
 
@@ -17,10 +19,12 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
     TextView largeText,mText=null;
     private Handler handler=null;
     private Runnable runnable=null;
-    int i = 0;
+    int i,minTime = 0;
     private ProgressBar progressBar;
+    EditText editText=null;
     String s="";
     Intent intent=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,35 +37,48 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
         handler = new Handler();
         runnable = new Runnable1();
         progressBar.setVisibility(View.INVISIBLE);
-        progressBar.setMax(30);
-        mText.setText("" + 30);
+        mText.setText("");
+        largeText.setText("Welcome!");
+        editText=(EditText)findViewById(R.id.editText);
         intent = new Intent(LongsentenceActivity.this, LongSentenceService.class);
+
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==speakBtn.getId()){
 
-            startService(intent);
+        if(v.getId()==speakBtn.getId()&&!editText.getText().toString().equals("")){
+            minTime=Integer.valueOf(editText.getText().toString());
+            if(minTime>=20&&minTime<=60) {
+                //start service and init progressBar
+                progressBar.setMax(minTime);
+                mText.setText("Time Left: " + minTime + "s");
+                intent.putExtra("minTime", minTime);
+                startService(intent);
+                progressBar.setVisibility(View.VISIBLE);
 
-            progressBar.setVisibility(View.VISIBLE);
-            mText.setText("" + 30);
-            handler.postDelayed(runnable, 1000);
-            speakBtn.setOnClickListener(null);
+                handler.postDelayed(runnable, 1000);
+                //button cannot be clicked until timer end
+                speakBtn.setOnClickListener(null);
+            }
+            else{
+                Toast.makeText(LongsentenceActivity.this,"retry",Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(LongsentenceActivity.this,"retry",Toast.LENGTH_SHORT).show();
         }
     }
     private class Runnable1 implements Runnable{
 
         @Override
         public void run() {
-            if(i<30) {
+            if(i<minTime) {
                 i++;
 //                Log.v("myActivity", "" + i);
                 progressBar.incrementProgressBy(1);
-                mText.setText("" + (30 - i));
+                mText.setText("Time Left: " + (minTime - i)+"s");
                 handler.postDelayed(this, 1000);
-                s = s + "this is a test"+i+"\n";
-                largeText.setText(s);
             }
             else{
                 handler.removeCallbacks(runnable);
@@ -69,11 +86,9 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
                 i=0;
                 progressBar.setVisibility(View.INVISIBLE);
                 progressBar.incrementProgressBy(-(progressBar.getMax()));
-                mText.setText("10");
-                largeText.setText("");
+                mText.setText("");
                 s="";
                 speakBtn.setOnClickListener(LongsentenceActivity.this);
-//                Intent i = new Intent(LongsentenceActivity.this, LongSentenceService.class);
                 stopService(intent);
             }
         }

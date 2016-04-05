@@ -24,9 +24,8 @@
         android:layout_gravity="center_vertical"
         android:max="30"
         android:progress="0"
-        android:layout_above="@+id/speakBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="144dp" />
+        android:layout_above="@+id/textView3"
+        android:layout_centerHorizontal="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +34,8 @@
         android:layout_alignParentStart="true"
         android:text="aaa"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/mediumText1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,5 +46,27 @@
         android:layout_above="@+id/progressbar1"
         android:layout_centerHorizontal="true"
         android:gravity="center_vertical|center_horizontal" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/editText"
+        android:layout_above="@+id/speakBtn"
+        android:layout_alignStart="@+id/speakBtn"
+        android:layout_alignEnd="@+id/speakBtn"
+        android:gravity="center_vertical|center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Input a number between 20 and 60 as second"
+        android:id="@+id/textView3"
+        android:layout_above="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical|center_horizontal" />
+
+
 
 </RelativeLayout>
