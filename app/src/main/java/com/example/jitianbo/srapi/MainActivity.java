@@ -1,5 +1,6 @@
 package com.example.jitianbo.srapi;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton pressToTalkBtn=null;
     TextView tv,tv2=null;
     APIClass api=null;
+    Button lsBtn = null;
     private ImageView imageView=null;
     private AnimationDrawable animationDrawable=null;
     @Override
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pressToTalkBtn.setOnTouchListener(this);
         pressToTalkBtn.setOnClickListener(this);
         pressToTalkBtn.setOnLongClickListener(this);
+        lsBtn=(Button)findViewById(R.id.lsBtn);
+        lsBtn.setOnClickListener(this);
         //invoke API
         api=new APIClass(this,tv2,animationDrawable,imageView);
 
@@ -43,6 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId()==pressToTalkBtn.getId()) {
             tv.setText("Too fast, please retry");
+        }
+        else if(v.getId()==lsBtn.getId()){
+            Intent i = new Intent(this,LongsentenceActivity.class);
+            startActivity(i);
+
         }
     }
 

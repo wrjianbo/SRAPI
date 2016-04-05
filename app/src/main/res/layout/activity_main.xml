@@ -49,4 +49,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:gravity="center_vertical|center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Long Sentence"
+        android:id="@+id/lsBtn"
+        android:layout_below="@+id/animationIV"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

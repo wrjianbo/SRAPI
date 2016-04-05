@@ -36,6 +36,17 @@ public class CommandService{
             audio.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             Toast.makeText(context,"slient mode",Toast.LENGTH_SHORT).show();
         }
+        else if(string.contains("send")&&string.contains("message")){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setType("vnd.android-dir/mms-sms");
+//              intent.setData(Uri.parse("content://mms-sms/conversations/"));//此为号码
+            context.startActivity(intent);
+        }
+        else if(string.contains("call")){
+            Intent intent=new Intent();
+            intent.setAction(Intent.ACTION_CALL_BUTTON);
+            context.startActivity(intent);
+        }
 
     }
     public boolean checkIfItIsACommand(){
@@ -43,6 +54,12 @@ public class CommandService{
             return true;
         }
         else if(string.contains("silent")&&context!=null){
+            return true;
+        }
+        else if(string.contains("send")&&string.contains("message")&&context!=null){
+            return true;
+        }
+        else if(string.contains("call")){
             return true;
         }
         else {

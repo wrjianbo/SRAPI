@@ -22,13 +22,17 @@
             </intent-filter>
         </activity>
 
-        <service android:name="speechrecoginition.api.tianboandzifan.VoiceService"></service>
-
-
+        <service android:name="speechrecoginition.api.tianboandzifan.VoiceService" />
 
         <receiver android:name="speechrecoginition.api.tianboandzifan.AlarmReceiver" />
 
-        <activity android:name=".AlarmActivity"></activity>
+        <activity android:name=".AlarmActivity" />
+        <activity android:name=".LongsentenceActivity" />
+
+        <service
+            android:name="speechrecoginition.api.tianboandzifan.LongSentenceService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
