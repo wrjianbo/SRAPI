@@ -19,7 +19,7 @@ public class LongSentenceService extends Service {
     int i,minTime = 0;
     SpeechRecognizer recognizer=null;
     Intent intent1=null;
-    String str = "";
+    String str,flag = "";
     listener listen=null;
     public LongSentenceService() {
     }
@@ -74,6 +74,11 @@ public class LongSentenceService extends Service {
                 handler.removeCallbacks(runnable);
                 Log.v("myService", "cancel");
                 recognizer.stopListening();
+                Intent intentI=new Intent();
+                intentI.setAction(flag);
+                intentI.putExtra("sentence", str);
+                sendBroadcast(intentI);
+                Toast.makeText(LongSentenceService.this, "send", Toast.LENGTH_SHORT).show();
                 //send broadcast
             }
         }
@@ -85,8 +90,10 @@ public class LongSentenceService extends Service {
         //init i ,str
         i=0;
         str="";
+        flag=intent.getStringExtra("flag");
+
         minTime=intent.getIntExtra("minTime",30);
-        Log.v("onBind", "" + minTime);
+        Log.v("onBind", "" + minTime+flag);
         this.init();
         //start listening user
         recognizer.startListening(intent1);

@@ -1,6 +1,9 @@
 package com.example.jitianbo.srapi;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +25,8 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
     int i,minTime = 0;
     private ProgressBar progressBar;
     EditText editText=null;
-    String s="";
+    String sentence="";
+    final String flagString="ThisIsTheFlagForLongSentenceServiceBroadcast";
     Intent intent=null;
 
     @Override
@@ -41,7 +45,10 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
         largeText.setText("Welcome!");
         editText=(EditText)findViewById(R.id.editText);
         intent = new Intent(LongsentenceActivity.this, LongSentenceService.class);
-
+        intent.putExtra("flag",flagString);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(flagString);
+        registerReceiver(myReceiver,intentFilter);
     }
 
     @Override
@@ -69,6 +76,7 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
             Toast.makeText(LongsentenceActivity.this,"retry",Toast.LENGTH_SHORT).show();
         }
     }
+
     private class Runnable1 implements Runnable{
 
         @Override
@@ -79,18 +87,30 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
                 progressBar.incrementProgressBy(1);
                 mText.setText("Time Left: " + (minTime - i)+"s");
                 handler.postDelayed(this, 1000);
-            }
-            else{
+            } else {
                 handler.removeCallbacks(runnable);
                 Log.v("myActivity", "cancel");
-                i=0;
+                i = 0;
                 progressBar.setVisibility(View.INVISIBLE);
                 progressBar.incrementProgressBy(-(progressBar.getMax()));
                 mText.setText("");
-                s="";
+//                s="";
                 speakBtn.setOnClickListener(LongsentenceActivity.this);
-                stopService(intent);
+
             }
         }
     }
+
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(flagString)) {
+                Log.v("myActivity", "onReceive");
+                sentence = intent.getStringExtra("sentence").trim().equals("") ? "You did not speak anything" : intent.getStringExtra("sentence").trim();
+                largeText.setText(sentence);
+//                stopService(intent);
+            }
+        }
+    };
+
 }
