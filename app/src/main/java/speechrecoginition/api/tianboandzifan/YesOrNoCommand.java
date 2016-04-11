@@ -143,7 +143,6 @@ public class YesOrNoCommand {
                     dialogForMakeSure();
 
                 }
-
                 else{
                     if(txtV!=null)
                         txtV.setText(commandString);

@@ -108,7 +108,8 @@ public class LongsentenceActivity extends AppCompatActivity implements View.OnCl
                 Log.v("myActivity", "onReceive");
                 sentence = intent.getStringExtra("sentence").trim().equals("") ? "You did not speak anything" : intent.getStringExtra("sentence").trim();
                 largeText.setText(sentence);
-//                stopService(intent);
+                stopService(LongsentenceActivity.this.intent);
+                
             }
         }
     };

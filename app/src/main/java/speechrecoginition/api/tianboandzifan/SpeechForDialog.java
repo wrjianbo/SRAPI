@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Locale;
@@ -20,13 +21,16 @@ public class SpeechForDialog {
     protected String words="";
     protected AlertDialog ad=null;
     int targetI=0;
+    TextView tv=null;
     DialogClass dc;
-    public SpeechForDialog(Context c,String s,AlertDialog d,int i,DialogClass dcccc){
+    public SpeechForDialog(Context c,String s,AlertDialog d,int i,TextView t,DialogClass dcccc){
         this.context=c;
         this.words=s;
         this.ad=d;
         this.targetI=i;
         this.dc=dcccc;
+        this.tv=t;
+
         initSpeech();
     }
 
@@ -39,7 +43,7 @@ public class SpeechForDialog {
         public void onInit(int status) {
             if (status == TextToSpeech.SUCCESS) {
                 if (tts!=null&&!tts.isSpeaking()) {
-                    CharSequence cs=words;
+                    CharSequence cs="Do you mean "+words;
                     tts.setLanguage(Locale.US);
                     tts.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     tts.speak(cs, TextToSpeech.QUEUE_FLUSH, null, "thisID");
@@ -63,8 +67,8 @@ public class SpeechForDialog {
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(a, "kkkk", Toast.LENGTH_SHORT).show();
-                        YesOrNoCommand yon = new YesOrNoCommand(context,ad,targetI,words,null,dc);
+//                        Toast.makeText(a, "kkkk", Toast.LENGTH_SHORT).show();
+                        YesOrNoCommand yon = new YesOrNoCommand(context,ad,targetI,words,tv,dc);
                         yon.checkYesOrNo();
                     }
                 });

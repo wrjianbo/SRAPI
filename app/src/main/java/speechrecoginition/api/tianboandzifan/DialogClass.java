@@ -87,7 +87,7 @@ public class DialogClass {
         thedialog.setCanceledOnTouchOutside(false);
         thedialog.show();
 
-        sfd=new SpeechForDialog(context,"Do you mean "+results.get(i).trim()+"...",thedialog,i,this);
+        sfd=new SpeechForDialog(context,results.get(i).trim(),thedialog,i,txtV,this);
         i++;
 //        new YesOrNoCommand(context,thedialog,i,results.get(i),txtV).checkYesOrNo();
     }

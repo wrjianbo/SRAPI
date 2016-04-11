@@ -61,16 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onLongClick(View v) {
         if(v.getId()==pressToTalkBtn.getId()){
-//            pressToTalkBtn.setText("Ready to talk");
-
-//            bindService(servI, connection, BIND_AUTO_CREATE);
-//            api.StopAPI();
             api.InitAPI();
             api.StartAPI();
             imageView.setVisibility(View.VISIBLE);
-
-
-
         }
         return true;
     }

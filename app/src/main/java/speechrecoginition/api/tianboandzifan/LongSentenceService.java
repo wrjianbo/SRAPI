@@ -78,7 +78,6 @@ public class LongSentenceService extends Service {
                 intentI.setAction(flag);
                 intentI.putExtra("sentence", str);
                 sendBroadcast(intentI);
-                Toast.makeText(LongSentenceService.this, "send", Toast.LENGTH_SHORT).show();
                 //send broadcast
             }
         }
@@ -91,7 +90,6 @@ public class LongSentenceService extends Service {
         i=0;
         str="";
         flag=intent.getStringExtra("flag");
-
         minTime=intent.getIntExtra("minTime",30);
         Log.v("onBind", "" + minTime+flag);
         this.init();
@@ -159,18 +157,17 @@ public class LongSentenceService extends Service {
                     s = "SERVER ERROR";
                     break;
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                    s = "";
-                    if(i<minTime) {
-                        //restart if timeout
-                        Log.v("SPEECH TIMEOUT", "restart listening");
-                        recognizer.destroy();
-                        init();
-                        recognizer.startListening(intent1);
-                    }
+                    s = "TIME OUT";
                     break;
             }
-            if(!s.equals(""))
-                Toast.makeText(LongSentenceService.this,s,Toast.LENGTH_SHORT).show();
+            if(i<minTime) {
+                //restart if timeout
+                Log.v("SPEECH TIMEOUT", "restart listening");
+                recognizer.destroy();
+                init();
+                recognizer.startListening(intent1);
+            }
+            Toast.makeText(LongSentenceService.this,s,Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -179,9 +176,8 @@ public class LongSentenceService extends Service {
             str = str + recognizer_result.get(0).trim() + " ";
             Log.v("myService", str);
             if(i<minTime) {
-                //restart listening
+                
                 recognizer.startListening(intent1);
-                Log.v("onResults", "restart listening");
             }
         }
 
